@@ -11,12 +11,21 @@ export default function Header({
 }: {
   companiesInfo: ICompanies[] | null;
 }) {
-  const { companies, currentCompanie, initializeCompanies } = useCompanies();
+  const {
+    companies,
+    currentCompanie,
+    initializeCompanies,
+    setCurrentCompanie,
+  } = useCompanies();
+
   useEffect(() => {
-    initializeCompanies(companiesInfo);
+    if (companiesInfo) {
+      initializeCompanies(companiesInfo);
+    }
   }, []);
+
   return (
-    <header className="bg-main-dark w-full p-6 text-white flex justify-between">
+    <header className="bg-main-dark w-full p-6 text-white flex justify-between h-20">
       <Image
         src="./images/logo-tractian.svg"
         className="pointer-events-none"
@@ -27,17 +36,19 @@ export default function Header({
       <div className="flex gap-4">
         {companies?.map(({ name, id }) => (
           <button
+            key={id}
             className={twMerge(
               "p-2 rounded-sm font-semibold flex gap-2 text-[12px] hover:scale-110 transition-all",
               currentCompanie.id === id ? "bg-main" : "bg-main-soft"
             )}
+            onClick={() => setCurrentCompanie({ name, id })}
           >
             <Image
               src="./icons/location.svg"
               className="pointer-events-none"
               width={20}
               height={20}
-              alt="Logo Tractian"
+              alt={`${name} Logo`}
             />
             <span>{name}</span>
           </button>
